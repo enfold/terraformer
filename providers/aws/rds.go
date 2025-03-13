@@ -71,27 +71,27 @@ func (g *RDSGenerator) loadDBClusterSnapshots(svc *rds.Client) error {
 	return nil
 }
 
-func (g *RDSGenerator) loadDBProxies(svc *rds.Client) error {
-	p := rds.NewDescribeDBProxiesPaginator(svc, &rds.DescribeDBProxiesInput{})
-	for p.HasMorePages() {
-		page, err := p.NextPage(context.TODO())
-		if err != nil {
-			return err
-		}
-		for _, db := range page.DBProxies {
-			resourceName := StringValue(db.DBProxyName)
-			g.Resources = append(g.Resources, terraformutils.NewSimpleResource(
-				resourceName,
-				resourceName,
-				"aws_db_proxy",
-				"aws",
-				RDSAllowEmptyValues,
-			))
-		}
-	}
-	return nil
+// func (g *RDSGenerator) loadDBProxies(svc *rds.Client) error {
+// 	p := rds.NewDescribeDBProxiesPaginator(svc, &rds.DescribeDBProxiesInput{})
+// 	for p.HasMorePages() {
+// 		page, err := p.NextPage(context.TODO())
+// 		if err != nil {
+// 			return err
+// 		}
+// 		for _, db := range page.DBProxies {
+// 			resourceName := StringValue(db.DBProxyName)
+// 			g.Resources = append(g.Resources, terraformutils.NewSimpleResource(
+// 				resourceName,
+// 				resourceName,
+// 				"aws_db_proxy",
+// 				"aws",
+// 				RDSAllowEmptyValues,
+// 			))
+// 		}
+// 	}
+// 	return nil
 
-}
+// }
 func (g *RDSGenerator) loadDBInstances(svc *rds.Client) error {
 	p := rds.NewDescribeDBInstancesPaginator(svc, &rds.DescribeDBInstancesInput{})
 	for p.HasMorePages() {
@@ -270,9 +270,9 @@ func (g *RDSGenerator) InitResources() error {
 	if err := g.loadDBInstanceSnapshots(svc); err != nil {
 		return err
 	}
-	if err := g.loadDBProxies(svc); err != nil {
-		return err
-	}
+	// if err := g.loadDBProxies(svc); err != nil {
+	// 	return err
+	// }
 	if err := g.loadDBParameterGroups(svc); err != nil {
 		return err
 	}
